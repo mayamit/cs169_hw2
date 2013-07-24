@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
+#@sorty=params[:id].gsub("_header","")
     @movies = Movie.all(:order => params[:sort])
   end
 
