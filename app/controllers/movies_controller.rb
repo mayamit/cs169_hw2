@@ -9,6 +9,11 @@ class MoviesController < ApplicationController
   def index
 #@sorty=params[:id].gsub("_header","")
     @movies = Movie.all(:order => params[:sort])
+    if params[:sort]=='title'
+      params[:thilite]="hilite"
+    elsif params[:sort]=='release_date'
+      params[:rhilite]='hilite'
+    end
   end
 
   def new
