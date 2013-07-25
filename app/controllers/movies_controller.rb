@@ -7,13 +7,21 @@ class MoviesController < ApplicationController
   end
 
   def index
-#@sorty=params[:id].gsub("_header","")
-    @movies = Movie.all(:order => params[:sort])
+#debugger
+#rats=params[:ratings].keys.to_s.gsub("[","(").gsub("]",")").gsub("\"","'")
+#@movies = Movie.find(:all, :conditions => ["rating IN ?", rats], :order => params[:sort])
+    if params[:ratings].nil?
+      rats=get_all_ratings
+    else
+      rats=params[:ratings].keys.to_s.gsub("[","(").gsub("]",")").gsub("\"","'")
+    end
+    @movies = Movie.find(:all, :order => params[:sort])
     if params[:sort]=='title'
       params[:thilite]="hilite"
     elsif params[:sort]=='release_date'
       params[:rhilite]='hilite'
     end
+    @all_ratings=get_all_ratings
   end
 
   def new
@@ -42,6 +50,10 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+
+  def get_all_ratings
+    Movie.order('rating').select("distinct(rating)").map(&:rating)
   end
 
 end
