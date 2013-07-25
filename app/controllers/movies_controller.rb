@@ -7,13 +7,13 @@ class MoviesController < ApplicationController
   end
 
   def index
-#debugger
-#rats=params[:ratings].keys.to_s.gsub("[","(").gsub("]",")").gsub("\"","'")
-#@movies = Movie.find(:all, :conditions => ["rating IN ?", rats], :order => params[:sort])
-    if params[:ratings].nil?
+    if params[:ratings].nil? and session[:ratings].nil?
       params[:rats]=get_all_ratings
-    else
+    elsif !params[:ratings].nil?
       params[:rats]=params[:ratings].keys
+      session[:ratings]=params[:ratings]
+    else
+      params[:rats]=session[:ratings].keys
     end
     @all_ratings=get_all_ratings
     @movies = Movie.find(:all, :conditions => ["rating IN (?)", params[:rats]], :order => params[:sort])
