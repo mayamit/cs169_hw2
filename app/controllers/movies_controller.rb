@@ -15,11 +15,6 @@ class MoviesController < ApplicationController
 #    else
 #      rats=params[:ratings].keys.to_s.gsub("[","(").gsub("]",")").gsub("\"","'")
 #    end
-    if params[:id].nil?
-      params[:sort]=nil
-    else
-      params[:sort]=params[:id].gsub("_header","")
-    end
     @movies = Movie.find(:all, :order => params[:sort])
     if params[:sort]=='title'
       params[:thilite]="hilite"
