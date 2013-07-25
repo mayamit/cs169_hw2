@@ -10,18 +10,19 @@ class MoviesController < ApplicationController
 #debugger
 #rats=params[:ratings].keys.to_s.gsub("[","(").gsub("]",")").gsub("\"","'")
 #@movies = Movie.find(:all, :conditions => ["rating IN ?", rats], :order => params[:sort])
-#if params[:ratings].nil?
-#      rats=get_all_ratings
-#    else
-#      rats=params[:ratings].keys.to_s.gsub("[","(").gsub("]",")").gsub("\"","'")
-#    end
-    @movies = Movie.find(:all, :order => params[:sort])
+    if params[:ratings].nil?
+      params[:rats]=get_all_ratings
+    else
+      params[:rats]=params[:ratings].keys
+    end
+    @all_ratings=get_all_ratings
+    @movies = Movie.find(:all, :conditions => ["rating IN (?)", params[:rats]], :order => params[:sort])
+#@movies = Movie.find(:all, :order => params[:sort])
     if params[:sort]=='title'
       params[:thilite]="hilite"
     elsif params[:sort]=='release_date'
       params[:rhilite]='hilite'
     end
-    @all_ratings=get_all_ratings
   end
 
   def new
