@@ -15,12 +15,14 @@ class MoviesController < ApplicationController
     else
       params[:rats]=session[:ratings].keys
     end
+    if !params[:sort].nil?
+      session[:sort]=params[:sort]
+    end
     @all_ratings=get_all_ratings
-    @movies = Movie.find(:all, :conditions => ["rating IN (?)", params[:rats]], :order => params[:sort])
-#@movies = Movie.find(:all, :order => params[:sort])
-    if params[:sort]=='title'
+    @movies = Movie.find(:all, :conditions => ["rating IN (?)", params[:rats]], :order => session[:sort])
+    if session[:sort]=='title'
       params[:thilite]="hilite"
-    elsif params[:sort]=='release_date'
+    elsif session[:sort]=='release_date'
       params[:rhilite]='hilite'
     end
   end
@@ -32,6 +34,7 @@ class MoviesController < ApplicationController
   def create
     @movie = Movie.create!(params[:movie])
     flash[:notice] = "#{@movie.title} was successfully created."
+    flash.keep
     redirect_to movies_path
   end
 
